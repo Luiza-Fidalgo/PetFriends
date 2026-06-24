@@ -1,0 +1,24 @@
+server:
+  port: 8082   # Transporte roda na porta 8082
+
+spring:
+  application:
+    name: PetFriends_Transporte
+
+  datasource:
+    url: jdbc:h2:mem:transporte
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  h2:
+    console:
+      enabled: true   # http://localhost:8082/h2-console
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest

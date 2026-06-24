@@ -1,0 +1,46 @@
+# Sobe TUDO de uma vez:  RabbitMQ + Almoxarifado + Transporte
+#
+# Rodar:   docker compose up --build
+# Parar:   Ctrl+C  e depois  docker compose down
+#
+# Todos os logs visuais (emojis) aparecem juntos nesta mesma janela,
+# cada linha com o nome do servico na frente.
+services:
+
+  # 1) A "central de correios" entre os microsservicos
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: petfriends-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # painel: http://localhost:15672 (guest/guest)
+    healthcheck:        # so libera os outros servicos quando o Rabbit estiver pronto
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # 2) Microsservico PetFriends_Almoxarifado
+  almoxarifado:
+    build: ./almoxarifado
+    container_name: petfriends-almoxarifado
+    ports:
+      - "8081:8081"
+    environment:
+      # dentro do Docker o host do Rabbit nao e "localhost", e o nome do servico
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  # 3) Microsservico PetFriends_Transporte
+  transporte:
+    build: ./transporte
+    container_name: petfriends-transporte
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
