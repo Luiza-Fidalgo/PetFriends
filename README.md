@@ -256,6 +256,34 @@ aplica a regra de negócio no agregado:
 | Transporte | Monta o `Endereco` e **cria a Entrega** (nasce *Em Trânsito*) | [`PedidoEventListener`](transporte/src/main/java/com/petfriends/transporte/messaging/PedidoEventListener.java) |
 
 ---
+## ⚙️ Parte 4 — Testes e Observabilidade
+a) O que é um Gateway de Serviço?
+
+O Gateway de Serviço é o ponto de entrada das requisições em uma arquitetura de microsserviços. Ele recebe as chamadas do cliente e encaminha para o serviço responsável.
+
+Suas vantagens incluem centralizar autenticação, logs e controle de requisições. Como desvantagem, pode se tornar um gargalo ou ponto único de falha.
+
+b) O que é ID de Correlação?
+
+É um identificador único utilizado para acompanhar uma requisição durante sua passagem por diferentes serviços.
+
+Para funcionar corretamente, o ID deve ser criado na entrada do sistema, propagado em chamadas HTTP e mensagens assíncronas e incluído nos logs de todos os serviços.
+
+c) Qual é a função do Micrometer e sua relação com o Zipkin?
+
+O Micrometer coleta métricas e informações de rastreamento em aplicações Java e Spring.
+
+O Micrometer Tracing gera os spans das requisições e os envia ao Zipkin, que apresenta visualmente o caminho e o tempo gasto em cada serviço.
+
+d) O que é um Agregador de Logs?
+
+É uma ferramenta que reúne os logs de todos os microsserviços em um único local.
+
+Isso facilita pesquisas, monitoramento e investigação de erros. Um exemplo é o ELK Stack, formado por Elasticsearch, Logstash e Kibana.
+
+Como desvantagens, exige infraestrutura adicional, padronização dos logs e pode gerar custos elevados de armazenamento.
+
+---
 
 ## 📂 Estrutura de pastas
 
@@ -290,7 +318,7 @@ Sistema Pet/
 
 ---
 
-### ⚡ Resumo rápido (cola para a apresentação)
+### ⚡ Resumo rápido
 
 ```powershell
 docker compose up -d --build     # 1. sobe tudo
